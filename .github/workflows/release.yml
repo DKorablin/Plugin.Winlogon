@@ -29,9 +29,11 @@ on:
         description: 'Optionally specify a new version number (overrides automatic versioning)'
         required: false
         default: ''
+
 permissions:
   contents: write      # Needed for creating releases and tags
   packages: write      # Needed for pushing to GitHub Packages
+
 env:
   SolutionName: ${{github.event.repository.name}}
   NuGetPackageSourceCredentials_github_DKorablin: Username=${{github.actor}};Password=${{secrets.DEPLOYMENT_TOKEN}}
