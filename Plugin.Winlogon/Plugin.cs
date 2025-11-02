@@ -26,10 +26,10 @@ namespace Plugin.Winlogon
 
 		internal TraceSource Trace { get => this._trace ?? (this._trace = Plugin.CreateTraceSource<Plugin>()); }
 
-		/// <summary>Настройки для взаимодействия из хоста</summary>
+		/// <summary>Settings for interaction from the host</summary>
 		Object IPluginSettings.Settings { get => this.Settings; }
 
-		/// <summary>Настройки для взаимодействия из плагина</summary>
+		/// <summary>Settings for interaction from the plugin</summary>
 		public PluginSettings Settings
 		{
 			get
@@ -54,7 +54,7 @@ namespace Plugin.Winlogon
 			SensLogon.DisplayUnlock += new EventHandler<UserInteractionEventArgs>(SensLogon_DisplayUnlock);
 			SensLogon.StartScreenSaver += new EventHandler<UserInteractionEventArgs>(SensLogon_StartScreenSaver);
 			SensLogon.StopScreenSaver += new EventHandler<UserInteractionEventArgs>(SensLogon_StopScreenSaver);
-			BroadcatsListener.Suspending += new EventHandler<EventArgs>(BroadcatsListener_Suspending);
+			BroadcastListener.Suspending += new EventHandler<EventArgs>(BroadcastListener_Suspending);
 			this.CountWorkingHours(false);
 			return true;
 		}
@@ -67,7 +67,7 @@ namespace Plugin.Winlogon
 			SensLogon.Logoff -= new EventHandler<UserInteractionEventArgs>(SensLogon_Logoff);
 			SensLogon.StartScreenSaver -= new EventHandler<UserInteractionEventArgs>(SensLogon_StartScreenSaver);
 			SensLogon.StopScreenSaver -= new EventHandler<UserInteractionEventArgs>(SensLogon_StopScreenSaver);
-			BroadcatsListener.Suspending -= new EventHandler<EventArgs>(BroadcatsListener_Suspending);
+			BroadcastListener.Suspending -= new EventHandler<EventArgs>(BroadcastListener_Suspending);
 
 			/*this.Logon = null;
 			this.Logoff = null;
@@ -154,7 +154,7 @@ namespace Plugin.Winlogon
 			this.StopScreenSaver?.Invoke(this, new UserDataEventArgs(e));
 		}
 
-		private void BroadcatsListener_Suspending(Object sender, EventArgs e)
+		private void BroadcastListener_Suspending(Object sender, EventArgs e)
 		{
 			if(this.Settings.EnableLogging)
 				this.AddLoggingMessage("Computer is suspending ({0})", this.CountWorkingHours(true));
