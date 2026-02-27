@@ -61,13 +61,19 @@ namespace Plugin.Winlogon
 
 		Boolean IPlugin.OnDisconnection(DisconnectMode mode)
 		{
-			SensLogon.DisplayLock -= new EventHandler<UserInteractionEventArgs>(SensLogon_DisplayLock);
-			SensLogon.DisplayUnlock -= new EventHandler<UserInteractionEventArgs>(SensLogon_DisplayUnlock);
-			SensLogon.Logon -= new EventHandler<UserInteractionEventArgs>(SensLogon_Logon);
-			SensLogon.Logoff -= new EventHandler<UserInteractionEventArgs>(SensLogon_Logoff);
-			SensLogon.StartScreenSaver -= new EventHandler<UserInteractionEventArgs>(SensLogon_StartScreenSaver);
-			SensLogon.StopScreenSaver -= new EventHandler<UserInteractionEventArgs>(SensLogon_StopScreenSaver);
-			BroadcastListener.Suspending -= new EventHandler<EventArgs>(BroadcastListener_Suspending);
+			try
+			{
+				SensLogon.DisplayLock -= new EventHandler<UserInteractionEventArgs>(SensLogon_DisplayLock);
+				SensLogon.DisplayUnlock -= new EventHandler<UserInteractionEventArgs>(SensLogon_DisplayUnlock);
+				SensLogon.Logon -= new EventHandler<UserInteractionEventArgs>(SensLogon_Logon);
+				SensLogon.Logoff -= new EventHandler<UserInteractionEventArgs>(SensLogon_Logoff);
+				SensLogon.StartScreenSaver -= new EventHandler<UserInteractionEventArgs>(SensLogon_StartScreenSaver);
+				SensLogon.StopScreenSaver -= new EventHandler<UserInteractionEventArgs>(SensLogon_StopScreenSaver);
+				BroadcastListener.Suspending -= new EventHandler<EventArgs>(BroadcastListener_Suspending);
+			}catch(NullReferenceException exc)
+			{
+				this.Trace.TraceData(TraceEventType.Error, 0, exc);
+			}
 
 			/*this.Logon = null;
 			this.Logoff = null;

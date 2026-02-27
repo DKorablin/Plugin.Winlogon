@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 [assembly: System.CLSCompliant(false)]
 
 [assembly: AssemblyDescription("Winlogon Notification Handler")]
-[assembly: AssemblyCopyright("Copyright © Danila Korablin 2012-2024")]
 
 /*if $(ConfigurationName) == Release (
 ..\..\..\..\ILMerge.exe  "/out:$(ProjectDir)..\bin\Plugin.Winlogon.dll" "$(TargetDir)Plugin.Winlogon.dll" "$(TargetDir)MWinlogon.dll" "/lib:..\..\..\SAL\bin"

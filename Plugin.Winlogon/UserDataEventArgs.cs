@@ -27,9 +27,9 @@ namespace Plugin.Winlogon
 
 			switch(key)
 			{
-			case nameof(UserName):
+			case nameof(this.UserName):
 				return (T)Convert.ChangeType(this.UserName, typeof(T));
-			case nameof(SessionId):
+			case nameof(this.SessionId):
 				return (T)Convert.ChangeType(this.SessionId, typeof(T));
 			default:
 				throw new NotImplementedException(key);
