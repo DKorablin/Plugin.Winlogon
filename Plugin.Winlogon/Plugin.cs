@@ -8,7 +8,6 @@ namespace Plugin.Winlogon
 	public class Plugin : IPlugin, IPluginSettings<PluginSettings>
 	{
 		private readonly IHost _host;
-		private TraceSource _trace;
 		private PluginSettings _settings;
 
 		private DateTime _today;
@@ -24,7 +23,7 @@ namespace Plugin.Winlogon
 		public event EventHandler<DataEventArgs> StopScreenSaver;
 		public event EventHandler<DataEventArgs> Suspending;
 
-		internal TraceSource Trace { get => this._trace ?? (this._trace = Plugin.CreateTraceSource<Plugin>()); }
+		internal ITraceSource Trace { get; }
 
 		/// <summary>Settings for interaction from the host</summary>
 		Object IPluginSettings.Settings { get => this.Settings; }
@@ -43,8 +42,11 @@ namespace Plugin.Winlogon
 			}
 		}
 
-		public Plugin(IHost host)
-			=> this._host = host ?? throw new ArgumentNullException(nameof(host));
+		public Plugin(IHost host, ITraceSource trace)
+		{
+			this._host = host ?? throw new ArgumentNullException(nameof(host));
+			this.Trace = trace ?? throw new ArgumentNullException(nameof(trace));
+		}
 
 		Boolean IPlugin.OnConnection(ConnectMode mode)
 		{
@@ -87,7 +89,7 @@ namespace Plugin.Winlogon
 		}
 
 		private void AddLoggingMessage(String format,params Object[] args)
-			=> this.Trace.TraceInformation(format, args);
+			=> this.Trace.TraceEvent(TraceEventType.Information, 0, format, args);
 
 		private TimeSpan CountWorkingHours(Boolean isLocking)
 		{
@@ -106,15 +108,6 @@ namespace Plugin.Winlogon
 					this._lastUnLock = now;
 			}
 			return this._workingHours;
-		}
-
-		private static TraceSource CreateTraceSource<T>(String name = null) where T : IPlugin
-		{
-			TraceSource result = new TraceSource(typeof(T).Assembly.GetName().Name + name);
-			result.Switch.Level = SourceLevels.All;
-			result.Listeners.Remove("Default");
-			result.Listeners.AddRange(System.Diagnostics.Trace.Listeners);
-			return result;
 		}
 
 		#region Event Handlers
